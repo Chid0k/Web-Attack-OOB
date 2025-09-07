@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <!-- import CSS chung -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Đăng ký</h1>
+        <p class="message">{{ Message }}</p>
+        <form action="/api/register" method="POST">
+            <label for="name">Họ và tên</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="account">Tên đăng nhập</label>
+            <input type="text" id="account" name="account" required>
+            
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" name="password" required>
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            
+            <button type="submit">Register</button>
+        </form>
+        <p>Bạn đã có tài khoản? <a href="/">Đăng nhập ngay</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: web-attack-app
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - /var/log/apache2/listen.log:/var/log/apache2/listen.log
+    restart: always

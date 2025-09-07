@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body class="home-page">
+    <nav class="navbar">
+        <div class="logo">Capture requests</div>
+        <div class="navbar-right">
+            <a href="/user" class="nav-link">User Info</a>
+            <a href="/api/logout" class="nav-button">Logout</a>
+        </div>
+    </nav>
+    <div class="link-info">
+        URL: <strong id="userLink">{{ u_link }}</strong>
+        <button id="copyBtn">Copy</button>
+    </div>
+    <div class="main">
+        <aside class="sidebar">
+            <h2>History</h2>
+            <div id="requestList"></div>
+        </aside>
+
+        <section class="content">
+            <h2>Request detail</h2>
+            <div id="detailView" class="detail-card">
+                <p>Chọn một request từ danh sách bên trái để xem chi tiết.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function copyText(text, button) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopied(button);
+                }).catch(err => {
+                    console.error("Clipboard API failed", err);
+                });
+            } else {
+                let textarea = document.createElement("textarea");
+                textarea.value = text;
+                textarea.style.position = "fixed"; 
+                textarea.style.opacity = 0; 
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                try {
+                    document.execCommand("copy");
+                    showCopied(button);
+                } catch (err) {
+                    console.error("Fallback copy failed", err);
+                }
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showCopied(button) {
+            const originalText = button.innerText;
+            button.innerText = "Copied!";
+            button.disabled = true;
+            setTimeout(() => {
+                button.innerText = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+
+        function fetchAndUpdateRequests() {
+            fetch("/api/log")
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to fetch data");
+                    return res.json();
+                })
+                .then(data => {
+                    const list = document.getElementById("requestList");
+                    const detailView = document.getElementById("detailView");
+                    const currentActive = document.querySelector(".request-item.active");
+                    const currentActiveId = currentActive ? currentActive.dataset.id : null;
+                    const viewedIds = new Set(
+                        Array.from(document.querySelectorAll(".request-item.viewed"))
+                            .map(item => item.dataset.id)
+                    );
+
+                    list.innerHTML = "";
+                    data.forEach((req, idx) => {
+                        const item = document.createElement("div");
+                        item.className = "request-item";
+                        item.dataset.id = req.id;
+                        if (viewedIds.has(req.id)) {
+                            item.classList.add("viewed");
+                        }
+                        item.innerHTML = `<strong>${req.client_ip}</strong><br><small>${req.time}</small>`;
+                        
+                        item.addEventListener("click", () => {
+                            document.querySelectorAll(".request-item").forEach(i => i.classList.remove("active"));
+                            item.classList.add("active");
+                            item.classList.add("viewed");
+
+                            detailView.innerHTML = `
+                                <div class="detail-grid">
+                                    <div>ID</div><div>${req.id}</div>
+                                    <div>IP</div><div>${req.client_ip}</div>
+                                    <div>Port</div><div>${req.client_port}</div>
+                                    <div>Time</div><div>${req.time}</div>
+                                </div>
+                                <h3>Header</h3>
+                                <pre>${req.B || "N/A"}</pre>
+                                ${req.C ? `<h3>Data</h3><pre>${req.C}</pre>` : ""}
+                                <h3>Response</h3>
+                                <pre>${req.F || "N/A"}</pre>
+                            `;
+                        });
+                        if ((idx === 0 && !currentActiveId) || req.id === currentActiveId) {
+                            item.click();
+                        }
+                        list.appendChild(item);
+                    });
+                })
+                .catch(err => {
+                    console.error("Error fetching data:", err);
+                    document.getElementById("requestList").innerHTML = "<p>Error loading requests. Please try again later.</p>";
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchAndUpdateRequests();
+            setInterval(fetchAndUpdateRequests, 2000);
+            document.getElementById("copyBtn").addEventListener("click", function() {
+                const link = document.getElementById("userLink").innerText;
+                copyText(link, this);
+            });
+        });
+    </script>
+</body>
+</html>

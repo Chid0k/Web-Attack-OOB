@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Attacker Simulator</h1>
+        <h2>Đăng nhập</h2>
+        <p class="message">{{ Message }}</p>
+        <form action="/api/login" method="POST">
+            <label for="account">Tên đăng nhập</label>
+            <input type="text" id="account" name="account" required>
+            
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p>Bạn chưa có tài khoản? <a href="/register">Đăng ký ngay</a></p>
+        <p>Quên mật khẩu? <a href="/forgot">Khôi phục tại đây</a></p>
+    </div>
+</body>
+</html>

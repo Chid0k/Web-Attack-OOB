@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Forgot Password</title>
+    <!-- import CSS chung -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Quên mật khẩu</h1>
+        <p class="message">{{ Message }}</p>
+        <form action="/api/forgot" method="POST">
+            <label for="username">Tên đăng nhập hoặc Email</label>
+            <input type="text" id="username" name="username" required>
+            
+            <button type="submit">Khôi phục mật khẩu</button>
+        </form>
+        <p>Bạn đã có tài khoản? <a href="/">Đăng nhập ngay</a></p>
+        <p>Chưa có tài khoản? <a href="/register">Đăng ký tại đây</a></p>
+    </div>
+</body>
+</html>
