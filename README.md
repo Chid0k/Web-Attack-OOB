@@ -7,11 +7,15 @@
 - Capture request with unique URL
 - Displays HTTP requests and responses and the Data segment of the packet
 - Auto refresh every 2 seconds
-### RFI
-- Updatting...
+- Public URL payload for Extended attack (ex: XS-Search, XXE, RFI ..)
 
 ## 📷 Images
-<img width="1913" height="928" alt="image" src="https://github.com/user-attachments/assets/caf6f509-34c5-4593-9239-3cf2ee0ac941" />
+### Log monitoring
+<img width="1899" height="998" alt="image" src="https://github.com/user-attachments/assets/ae745cec-b995-4062-8768-291c0c8eb139" />
+
+### Payload editor
+
+<img width="1897" height="956" alt="image" src="https://github.com/user-attachments/assets/066f9f59-cadc-4369-9d45-ef7704dfb02e" />
 
 ## Component
 - Database that stores user accounts
