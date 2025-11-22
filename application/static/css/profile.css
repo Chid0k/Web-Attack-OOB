@@ -1,0 +1,97 @@
+body.home-page {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+/* Base layout */
+body.profile-page {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    min-height: 100vh;
+    color: #222;
+}
+
+/* Navbar (kept consistent with home) */
+.navbar {
+    background: #4facfe;
+    padding: 0.7rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+.navbar .logo { font-size: 1.2rem; font-weight: bold; }
+.navbar-right { display: flex; align-items: center; gap: 1rem; }
+.nav-link { color: white; text-decoration: none; font-weight: 500; }
+.nav-button {
+    background: white; color: #4facfe;
+    padding: 0.4rem 1rem; border-radius: 0.4rem;
+    text-decoration: none; font-weight: bold;
+}
+
+/* Container */
+.profile-container {
+    max-width: 980px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+}
+
+.profile-header { 
+    background: #fff; 
+    padding: 1rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.profile-header h1 { margin: 0; font-size: 1.4rem; }
+.muted { color: #666; margin: 0.25rem 0 0; }
+
+.profile-content { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+.card {
+    background: #fff;
+    padding: 1.1rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.card h2 { margin-top: 0; margin-bottom: 0.6rem; }
+
+/* Form styles */
+.profile-form label { display: block; font-weight: 600; margin-bottom: 0.35rem; }
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="password"] {
+    width: 100%;
+    padding: 0.6rem 0.65rem;
+    border: 1px solid #e3e7ee;
+    border-radius: 0.45rem;
+    margin-bottom: 0.9rem;
+    box-sizing: border-box;
+}
+
+.primary {
+    background: #4facfe;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 0.45rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+.primary:hover { background: #3e8ed0; }
+
+.muted-link { color: #666; text-decoration: none; }
+.muted-link:hover { text-decoration: underline; color: #4facfe; }
+
+/* Responsive */
+@media (min-width: 800px) {
+    .profile-content { grid-template-columns: 1fr 1fr; }
+}

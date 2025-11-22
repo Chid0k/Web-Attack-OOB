@@ -3,24 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="login-container">
-        <h1>Attacker Simulator</h1>
-        <h2>Đăng nhập</h2>
-        <p class="message">{{ Message }}</p>
-        <form action="/api/login" method="POST">
-            <label for="account">Tên đăng nhập</label>
-            <input type="text" id="account" name="account" required>
-            
-            <label for="password">Mật khẩu</label>
-            <input type="password" id="password" name="password" required>
-            
-            <button type="submit">Login</button>
-        </form>
-        <p>Bạn chưa có tài khoản? <a href="/register">Đăng ký ngay</a></p>
-        <p>Quên mật khẩu? <a href="/forgot">Khôi phục tại đây</a></p>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anime.css') }}">
+    </head>
+<body class="anime-page">
+    <div class="anime-wrap">
+        <header class="anime-header">
+            <div>
+                <div class="anime-brand">Attacker Simulator</div>
+                <div class="anime-sub">Đăng nhập</div>
+            </div>
+            <div class="anime-actions">
+                <a href="/register" class="anime-link">Register</a>
+            </div>
+        </header>
+
+        <div class="center-form">
+            <div class="form-card">
+                <p class="message anime-sub">{{ Message }}</p>
+                <form action="/api/login" method="POST">
+                    <label for="account">Tên đăng nhập</label>
+                    <input type="text" id="account" name="account" required>
+
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <div style="margin-top:10px">
+                        <button type="submit" class="submit">Login</button>
+                    </div>
+                </form>
+                <p style="margin-top:10px" class="anime-sub">Quên mật khẩu? <a href="/forgot">Khôi phục tại đây</a></p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

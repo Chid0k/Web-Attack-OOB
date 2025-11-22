@@ -1,0 +1,84 @@
+/* Anime-inspired bright theme */
+:root{
+  --bg1: #fff7ff;
+  --bg2: #f0fbff;
+  --card:#ffffff;
+  --accent1:#ff8ad6; /* pink */
+  --accent2:#7ad6ff; /* sky */
+  --text:#1e2a3a; /* dark text */
+  --muted:#6b7480;
+  --glass: rgba(255,255,255,0.7);
+}
+html,body{height:100%;}
+body.anime-page{
+  margin:0;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(160deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+
+.anime-wrap{width:100vw;max-width:100vw;margin:0;padding:24px 32px;box-sizing:border-box}
+.anime-header{display:flex;align-items:center;gap:16px}
+.anime-brand{font-weight:800;font-size:28px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.anime-sub{color:var(--muted);font-size:14px}
+.anime-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+.anime-btn{padding:8px 14px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;border:0;cursor:pointer;font-weight:700}
+.anime-link{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(30,42,58,0.06);color:var(--text);text-decoration:none}
+
+.anime-top{margin-top:12px;background:var(--card);padding:12px;border-radius:14px;box-shadow:0 10px 30px rgba(30,42,58,0.06)}
+.info-row{display:flex;gap:12px;align-items:right}
+.anime-top .info-row{justify-content:center}
+.info-row strong{color:var(--text);font-weight:700}
+
+.main-grid{display:grid;grid-template-columns:320px 1fr;gap:16px;margin-top:16px}
+.sidebar-card{background:linear-gradient(180deg,#fff,#fbfbff);padding:12px;border-radius:12px;border:1px solid rgba(30,42,58,0.04);max-height:70vh;overflow:auto}
+.history-item{padding:10px;border-radius:8px;margin-bottom:8px;background:rgba(122,122,122,0.02);cursor:pointer;transition:all 160ms}
+.history-item:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(122,122,122,0.06)}
+.history-item.active{background:linear-gradient(90deg,var(--accent2),var(--accent1));color:white}
+.history-item.viewed{opacity:0.45;filter:grayscale(40%);color:var(--muted)}
+
+/* Support request items created by JS (keeps selectors compatible) */
+.request-item{padding:10px;border-radius:8px;margin-bottom:8px;background:rgba(122,122,122,0.02);cursor:pointer;transition:all 160ms;font-size:1rem}
+.request-item:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(122,122,122,0.06)}
+.request-item.active{background:linear-gradient(90deg,var(--accent2),var(--accent1));color:white}
+.request-item.viewed{opacity:0.45;filter:grayscale(60%);color:var(--muted)}
+.request-item.viewed strong{color:var(--muted)}
+
+.detail-card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 12px 30px rgba(30,42,58,0.06);min-height:60vh;overflow:auto}
+.detail-card h3{margin-top:0;color:var(--accent1)}
+pre.detail-pre{background:linear-gradient(180deg,#fbfbff,#f7f9ff);padding:12px;border-radius:8px;color:var(--text);white-space:pre-wrap;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace}
+
+/* Forms */
+.form-card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 22px rgba(30,42,58,0.05)}
+label{display:block;margin-bottom:6px;color:var(--muted);font-weight:600}
+input[type="text"],input[type="email"],input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(30,42,58,0.08);margin-bottom:12px}
+.submit{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;border:0;padding:10px 14px;border-radius:10px;font-weight:800}
+
+@media(max-width:900px){.main-grid{grid-template-columns:1fr;}.anime-wrap{padding:12px}}
+
+/* Centered small form layout for login/register/forgot */
+.center-form{max-width:520px;margin:48px auto;padding:18px;display:block}
+.center-form .form-card{box-shadow:0 18px 40px rgba(30,42,58,0.08);border-radius:14px;padding:20px}
+.center-form .anime-brand{display:none}
+.center-form .anime-header{justify-content:center}
+@media(max-width:600px){.center-form{margin:20px;padding:12px}}
+
+/* Payload page layout: top 2/3 for textareas, bottom 1/3 for options */
+.payload-container{height:calc(150vh - 900px);display:grid;grid-template-rows:2fr 1fr;gap:14px}
+.payload-top{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.payload-box{background:linear-gradient(180deg,#fff,#fbfbff);padding:12px;border-radius:10px;border:1px solid rgba(30,42,58,0.04);height:100%;box-sizing:border-box}
+.payload-box h4{margin:0 0 8px 0;color:var(--accent1)}
+.payload-box textarea{width:100%;height:100%;resize:none;border-radius:8px;border:1px solid rgba(30,42,58,0.06);padding:10px;box-sizing:border-box;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace;font-size:16px;line-height:1.45}
+.payload-box{overflow:auto}
+.payload-box input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(30,42,58,0.06)}
+.payload-box textarea.compact{height:250px;font-size:18px;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace}
+.payload-bottom{display:flex;gap:18px;align-items:stretch}
+.options-panel{min-width:280px;max-width:480px;background:linear-gradient(180deg,#fff,#fbfbff);padding:16px;border-radius:12px;border:1px solid rgba(30,42,58,0.04);overflow:auto}
+.options-panel label{display:block;margin-bottom:6px;color:var(--muted);font-weight:600}
+.options-panel select, .options-panel input, .options-panel textarea{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(30,42,58,0.06);margin-bottom:8px}
+.options-actions{display:flex;gap:8px;align-items:center}
+
+@media(max-width:900px){.payload-container{height:auto;grid-template-rows:auto auto}.payload-top{grid-template-columns:1fr}.options-panel{width:100%}}
+/* make preview area scrollable so it doesn't overlap top content */
+.payload-box pre{max-height:100%;overflow:auto}

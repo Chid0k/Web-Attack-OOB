@@ -3,21 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Forgot Password</title>
-    <!-- import CSS chung -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anime.css') }}">
 </head>
-<body>
-    <div class="login-container">
-        <h1>Quên mật khẩu</h1>
-        <p class="message">{{ Message }}</p>
-        <form action="/api/forgot" method="POST">
-            <label for="username">Tên đăng nhập hoặc Email</label>
-            <input type="text" id="username" name="username" required>
-            
-            <button type="submit">Khôi phục mật khẩu</button>
-        </form>
-        <p>Bạn đã có tài khoản? <a href="/">Đăng nhập ngay</a></p>
-        <p>Chưa có tài khoản? <a href="/register">Đăng ký tại đây</a></p>
+<body class="anime-page">
+    <div class="anime-wrap">
+        <header class="anime-header">
+            <div>
+                <div class="anime-brand">Password Recovery</div>
+                <div class="anime-sub">Quên mật khẩu</div>
+            </div>
+            <div class="anime-actions">
+                <a href="/" class="anime-link">Login</a>
+                <a href="/register" class="anime-link">Register</a>
+            </div>
+        </header>
+
+        <div class="center-form">
+            <div class="form-card">
+                <h3 style="margin-top:0;color:var(--accent1)">Khôi phục mật khẩu</h3>
+                <p class="message anime-sub">{{ Message }}</p>
+                <form action="/api/forgot" method="POST">
+                    <label for="username">Tên đăng nhập hoặc Email</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <div style="margin-top:10px">
+                        <button type="submit" class="submit">Khôi phục mật khẩu</button>
+                    </div>
+                </form>
+                <p style="margin-top:10px" class="anime-sub">Chưa có tài khoản? <a href="/register">Đăng ký tại đây</a></p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

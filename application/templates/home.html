@@ -1,34 +1,53 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="/static/css/home.css">
-</head>
-<body class="home-page">
-    <nav class="navbar">
-        <div class="logo">Capture requests</div>
-        <div class="navbar-right">
-            <a href="/user" class="nav-link">User Info</a>
-            <a href="/api/logout" class="nav-button">Logout</a>
-        </div>
-    </nav>
-    <div class="link-info">
-        URL: <strong id="userLink">{{ u_link }}</strong>
-        <button id="copyBtn">Copy</button>
-    </div>
-    <div class="main">
-        <aside class="sidebar">
-            <h2>History</h2>
-            <div id="requestList"></div>
-        </aside>
-
-        <section class="content">
-            <h2>Request detail</h2>
-            <div id="detailView" class="detail-card">
-                <p>Chọn một request từ danh sách bên trái để xem chi tiết.</p>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anime.css') }}">
+    </head>
+<body class="anime-page">
+    <div class="anime-wrap">
+        <header class="anime-header">
+            <div>
+                <div class="anime-brand">Logging Studio</div>
+                <div class="anime-sub">Live requests — Attacker is following you</div>
             </div>
-        </section>
+            <div class="anime-actions">
+                <a href="/payload" class="anime-link">Payload</a>
+                <a href="/profile" class="anime-link">Profile</a>
+                <a href="/api/logout" class="anime-link">Logout</a>
+                <div class="anime-sub">User: <strong>{{ session.get('user') }}</strong></div>
+            </div>
+        </header>
+
+        <div class="anime-top">
+            <div class="info-row">
+                <div>URL:</div>
+                <strong id="userLink">{{ u_link }}</strong>
+                <button id="copyBtn" class="anime-btn">Copy URL</button>
+                <span class="anime-sub"></span>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <aside class="sidebar-card">
+                <h3 style="margin:0 0 8px 0;color:var(--accent1)">History</h3>
+                <div id="requestList"></div>
+            </aside>
+
+            <section>
+                <div class="detail-card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <h3>Request detail</h3>
+                        <button id="copyDetailBtn" class="anime-btn">Copy detail</button>
+                    </div>
+                    <div style="margin-top:10px">
+                        <pre id="detailPre" class="detail-pre">Chọn một request từ danh sách bên trái để xem chi tiết.</pre>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
     <script>
@@ -74,8 +93,34 @@
                     return res.json();
                 })
                 .then(data => {
-                    const list = document.getElementById("requestList");
-                    const detailView = document.getElementById("detailView");
+                    // sort logs by time (newest first). Use Date.parse fallback to 0 for invalid times.
+                    try {
+                        data.sort((a, b) => {
+                            const ta = Date.parse(a.time) || 0;
+                            const tb = Date.parse(b.time) || 0;
+                            return tb - ta;
+                        });
+                    } catch (e) {
+                        console.warn('Could not sort logs by time:', e);
+                    }
+                        const list = document.getElementById("requestList");
+                        const detailPre = document.getElementById("detailPre");
+
+                        function renderDetail(req) {
+                            const parts = [];
+                            parts.push(`ID: ${req.id}`);
+                            parts.push(`IP: ${req.client_ip}`);
+                            parts.push(`Port: ${req.client_port}`);
+                            parts.push(`Time: ${req.time}`);
+                            parts.push('');
+                            parts.push('--- Header ---');
+                            parts.push(req.B || 'N/A');
+                            if (req.C) { parts.push(''); parts.push('--- Data ---'); parts.push(req.C); }
+                            parts.push('');
+                            parts.push('--- Response ---');
+                            parts.push(req.F || 'N/A');
+                            detailPre.textContent = parts.join('\n');
+                        }
                     const currentActive = document.querySelector(".request-item.active");
                     const currentActiveId = currentActive ? currentActive.dataset.id : null;
                     const viewedIds = new Set(
@@ -98,19 +143,7 @@
                             item.classList.add("active");
                             item.classList.add("viewed");
 
-                            detailView.innerHTML = `
-                                <div class="detail-grid">
-                                    <div>ID</div><div>${req.id}</div>
-                                    <div>IP</div><div>${req.client_ip}</div>
-                                    <div>Port</div><div>${req.client_port}</div>
-                                    <div>Time</div><div>${req.time}</div>
-                                </div>
-                                <h3>Header</h3>
-                                <pre>${req.B || "N/A"}</pre>
-                                ${req.C ? `<h3>Data</h3><pre>${req.C}</pre>` : ""}
-                                <h3>Response</h3>
-                                <pre>${req.F || "N/A"}</pre>
-                            `;
+                            renderDetail(req);
                         });
                         if ((idx === 0 && !currentActiveId) || req.id === currentActiveId) {
                             item.click();
@@ -126,11 +159,18 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             fetchAndUpdateRequests();
-            setInterval(fetchAndUpdateRequests, 2000);
+            setInterval(fetchAndUpdateRequests, 3000);
             document.getElementById("copyBtn").addEventListener("click", function() {
                 const link = document.getElementById("userLink").innerText;
                 copyText(link, this);
             });
+                    const copyDetailBtn = document.getElementById('copyDetailBtn');
+                    if (copyDetailBtn) {
+                        copyDetailBtn.addEventListener('click', function() {
+                            const text = document.getElementById('detailPre').innerText;
+                            copyText(text, this);
+                        });
+                    }
         });
     </script>
 </body>

@@ -9,4 +9,5 @@ services:
       - "5001:5001"
     volumes:
       - /var/log/apache2/listen.log:/var/log/apache2/listen.log
+      - ./users.db:/app/users.db
     restart: always

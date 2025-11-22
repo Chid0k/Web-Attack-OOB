@@ -12,6 +12,7 @@ RUN pip install flask-session
 RUN pip install requests
 RUN pip install gunicorn
 RUN pip install markupsafe
+RUN pip install Flask-CORS
 
 # Cài supervisor
 RUN apt-get update && apt-get install -y supervisor

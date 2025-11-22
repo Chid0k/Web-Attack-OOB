@@ -1,8 +1,9 @@
-from datetime import timedelta
 from flask import Flask
-from application.blueprints.routes import web, api
-from application.util import response
+from application.blueprints.webview import webview
+from application.blueprints.api import api
+from application.utils.auth import response
 import random
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -11,7 +12,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
 
-app.register_blueprint(web, url_prefix='/')
+app.register_blueprint(webview, url_prefix='/')
 app.register_blueprint(api, url_prefix='/api')
 
 @app.errorhandler(404)

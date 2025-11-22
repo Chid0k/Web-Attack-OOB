@@ -1,0 +1,10 @@
+{
+    "path": "/test.html",
+    "headers": [
+        "Create by: chidok"
+    ],
+    "data": "<h1>chidok</h1>",
+    "content_type": "text/html",
+    "username": "chidok",
+    "userid": "3167b6eb-473f-41ac-b2fa-459bbb43ad5a"
+}

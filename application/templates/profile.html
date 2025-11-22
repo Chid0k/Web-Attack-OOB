@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anime.css') }}">
+</head>
+<body class="anime-page">
+    <div class="anime-wrap">
+        <header class="anime-header">
+            <div>
+                <div class="anime-brand">User Profile</div>
+                <div class="anime-sub">Manage your account</div>
+            </div>
+            <div class="anime-actions">
+                <a href="/" class="anime-link">Home</a>
+                <a href="/api/logout" class="anime-link">Logout</a>
+            </div>
+        </header>
+
+        <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-card">
+                <h3 style="margin-top:0;color:var(--accent1)">Profile</h3>
+                <div class="anime-sub">Name: <strong>{{ userdetail.name }}</strong></div>
+                <div class="anime-sub" style="margin-top:6px">Email: <strong>{{ userdetail.email }}</strong></div>
+                <br>
+                <p class="message anime-sub">
+                    {{ Message }}  
+                </p>
+            </div>
+            
+            <div class="form-card">
+                <h3 style="margin-top:0;color:var(--accent2)">Update Profile</h3>
+                <form method="POST" action="/api/update_profile">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="{{ userdetail.name }}" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ userdetail.email }}" required>
+
+                    <button type="submit" class="submit">Update Profile</button>
+                </form>
+            </div>
+        </div>
+
+        <div style="margin-top:16px;">
+            <div class="form-card">
+                <h3 style="margin-top:0;color:var(--accent1)">Change Password</h3>
+                <form method="POST" action="/api/change_password">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" id="current_password" name="current_password" required>
+
+                    <label for="new_password">New Password</label>
+                    <input type="password" id="new_password" name="new_password" required>
+
+                    <label for="confirm_new_password">Confirm New Password</label>
+                    <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+                    <button type="submit" class="submit">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

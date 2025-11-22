@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anime.css') }}">
+</head>
+<body class="anime-page">
+    <div class="anime-wrap">
+
+        <header class="anime-header">
+            <div>
+                <div class="anime-brand">Payload Builder</div>
+                <div class="anime-sub">Create or preview payloads</div>
+            </div>
+            <div class="anime-actions">
+                <a href="/" class="anime-link">Home</a>
+                <a href="/profile" class="anime-link">Profile</a>
+            </div>
+        </header>
+
+        <div style="margin-top:14px" class="form-card">
+            <h2 style="margin-top:0;color:var(--accent1)">Payload Page</h2>
+            <p>User: <strong>{{ user }}</strong></p>
+            <div class="info-row" style="margin-bottom:10px;align-items:center;gap:10px">
+                <div style="min-width:40px">Preview: </div>
+                <a id="listenerLink" data-base="{{ u_link + data_view.path }}" href="{{ u_link + data_view.path }}" target="_blank">{{ u_link + data_view.path }}</a>
+                <button type="button" id="copyBtn" class="anime-btn">Copy URL</button>
+            </div>
+
+            
+
+            <form method="POST" action="/api/payload">
+                <div style="margin-bottom:12px;display:flex;align-items:center;gap:12px">
+                    <label for="path" style="font-weight:700;color:var(--muted);min-width:40px">Path</label>
+                    <input type="text" id="path" name="path" value="{{ data_view.path }}" style="flex:1;max-width:680px" placeholder="/exploit"/>
+                </div>
+
+                <div class="payload-container">
+                    <div class="payload-top">
+                        <div class="payload-box">
+                            <h4>Header</h4>
+                            <textarea id="header" name="header" class="compact" placeholder="Raw headers (one per line, e.g. Key: Value)" >{{ data_view.headers | join('\n') }}</textarea>
+                        </div>
+
+                        <div class="payload-box">
+                            <h4>Data</h4>
+                            <textarea id="data" name="data" class="compact" placeholder="Request body / payload here">{{ data_view.data }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="payload-bottom">
+                        <div class="options-panel">
+                            <label for="content_type">Content-Type</label>
+                            <select id="content_type" name="content_type">
+                                <option value="text/html">text/html</option>
+                                <option value="text/javascript">text/javascript</option>
+                                <option value="application/json">application/json</option>
+                                <option value="text/plain">text/plain</option>
+                                <option value="text/xml">text/xml</option>
+                                <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+                                <option value="multipart/form-data">multipart/form-data</option>
+                            </select>
+
+                            <div class="options-actions">
+                                <button type="submit" class="submit">Save Payload</button>
+                            </div>
+                        </div>
+
+                        <div class="payload-box" style="flex:1">
+                            <h4>Notes</h4>
+                            <p class="anime-sub">No preview. Use Save to persist payload or copy the link above.</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // small preview helper: assemble headers + data for quick viewing
+        document.addEventListener('DOMContentLoaded', function(){
+            const previewBtn = document.getElementById('previewBtn');
+            const pathInput = document.getElementById('path');
+            const listenerLink = document.getElementById('listenerLink');
+
+            // live-update listener link when typing path and sync into hidden form field
+            const pathField = document.getElementById('pathField');
+            if (pathInput && listenerLink) {
+                const base = listenerLink.dataset.base || listenerLink.href || '';
+                pathInput.addEventListener('input', function(e){
+                    const v = (e.target.value || '').trim();
+                    let newUrl = base.replace(/\/+$/,'');
+                    if (v.length) {
+                        if (v.startsWith('/')) newUrl += v;
+                        else newUrl += v;
+                    }
+                    listenerLink.href = newUrl;
+                    listenerLink.textContent = newUrl;
+                    if (pathField) pathField.value = v;
+                });
+                // initialize hidden field from current input value
+                if (pathField) pathField.value = (pathInput.value || '').trim();
+            }
+
+            if (previewBtn) {
+                previewBtn.addEventListener('click', function(){
+                    const path = document.getElementById('path').value || '/';
+                    const ct = document.getElementById('content_type').value || '';
+                    const header = document.getElementById('header').value || '';
+                    const data = document.getElementById('data').value || '';
+                    const lines = [];
+                    lines.push(`POST ${path} HTTP/1.1`);
+                    if (ct) lines.push(`Content-Type: ${ct}`);
+                    if (header.trim()) lines.push(...header.split(/\r?\n/).map(l=>l.trim()).filter(Boolean));
+                    lines.push('');
+                    lines.push(data);
+                    document.getElementById('payloadPreview').textContent = lines.join('\n');
+                });
+            }
+
+            // copy helper (same behavior as home.html)
+            function copyText(text, button) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopied(button);
+                    }).catch(err => {
+                        console.error('Clipboard API failed', err);
+                    });
+                } else {
+                    let textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = 0;
+                    document.body.appendChild(textarea);
+                    textarea.focus();
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        showCopied(button);
+                    } catch (err) {
+                        console.error('Fallback copy failed', err);
+                    }
+                    document.body.removeChild(textarea);
+                }
+            }
+
+            function showCopied(button) {
+                if (!button) return;
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                button.disabled = true;
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.disabled = false;
+                }, 2000);
+            }
+
+            // attach copy handler to new copy button (like home.html)
+            const copyBtn = document.getElementById('copyBtn');
+            if (copyBtn && listenerLink) {
+                copyBtn.addEventListener('click', function() {
+                    const url = listenerLink.href || listenerLink.dataset.base || '';
+                    copyText(url, this);
+                });
+            }
+
+            // ensure hidden path field is set when submitting the payload form
+            const payloadForm = document.querySelector('form[action="/api/payload"]');
+            if (payloadForm && pathInput && pathField) {
+                payloadForm.addEventListener('submit', function(){
+                    pathField.value = (pathInput.value || '').trim();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
